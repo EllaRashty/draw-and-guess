@@ -17,6 +17,12 @@ function Nav() {
         <Link style={navStyle} to="/drawpage">
           <li>DrawP</li>
         </Link>
+        <Link style={navStyle} to="/wordchoosing">
+          <li>word choosing</li>
+        </Link>
+        <Link style={navStyle} to="/guessingpage">
+          <li>guessing page</li>
+        </Link>
       </ul>
     </nav>
   );

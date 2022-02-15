@@ -3,18 +3,18 @@ import React, { useContext, useRef, useState } from "react";
 const CanvasContext = React.createContext();
 
 export const CanvasProvider = ({ children }) => {
-  const [isDrawing, setIsDrawing] = useState(false)
+  const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
-
+  let data = null;
   const prepareCanvas = () => {
-    const canvas = canvasRef.current
-    canvas.width = window.visualViewport.width *2;
-    canvas.height = window.visualViewport.height*2 ;
+    const canvas = canvasRef.current;
+    canvas.width = window.visualViewport.width * 2;
+    canvas.height = window.visualViewport.height * 2;
     canvas.style.width = `${window.visualViewport.width}px`;
     canvas.style.height = `${window.visualViewport.height}px`;
 
-    const context = canvas.getContext("2d")
+    const context = canvas.getContext("2d");
     context.scale(2, 2);
     context.lineCap = "round";
     context.strokeStyle = "black";
@@ -45,10 +45,30 @@ export const CanvasProvider = ({ children }) => {
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d")
-    context.fillStyle = "white"
-    context.fillRect(0, 0, canvas.width, canvas.height)
-  }
+    const context = canvas.getContext("2d");
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const save = () => {
+    const context = canvasRef.current.getContext("2d");
+    data = context.getImageData(
+      0,
+      0,
+      context.canvas.width,
+      context.canvas.height
+    );
+    // clearCanvas();
+    // context.putImageData(data, 100, 100);
+  };
+
+  const displayCanvas = () => {
+    if (!data) {
+      const context = canvasRef.current.getContext("2d");
+      console.log("here")
+      context.putImageData(data, 100, 100);
+    }
+  };
 
   return (
     <CanvasContext.Provider
@@ -60,6 +80,8 @@ export const CanvasProvider = ({ children }) => {
         finishDrawing,
         clearCanvas,
         draw,
+        save,
+        displayCanvas,
       }}
     >
       {children}
