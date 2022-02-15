@@ -66,7 +66,8 @@ export const CanvasProvider = ({ children }) => {
     if (!data) {
       const context = canvasRef.current.getContext("2d");
       console.log("here")
-      context.putImageData(data, 100, 100);
+      // return context.putImageData(data, 100, 100);
+      return 'helo';
     }
   };
 

@@ -1,15 +1,18 @@
-import React from "react";
+import React , {useContext} from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
+import { GameContext } from "./GameContext";
 
 function Nav() {
   const navStyle = {
     color: "white",
   };
+  const [games, setGames] = useContext(GameContext);
 
   return (
     <nav>
       <h3>Nav</h3>
+      <p>List of game: {games.length}</p>
       <ul className="nav-links">
         <Link style={navStyle} to="/welcome">
           <li>Welcome</li>
