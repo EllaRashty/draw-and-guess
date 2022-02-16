@@ -7,7 +7,7 @@ import GuessingPage from "./GuessingPage";
 import GameList from "./GameList";
 import AddGame from "./AddGame";
 import { GameProvider, GameContext } from "./GameContext";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 
 function App() {
   return (
@@ -15,15 +15,15 @@ function App() {
       <div className="App">
       <GameProvider>
         <Nav />
-        <Switch>
+        <Routes>
           {/* <GameProvider> */}
-            <Route path="/" exact component={Home} />
-            <Route path="/welcome" component={Welcome} />
-            <Route path="/drawpage" component={DrawPage} />
-            <Route path="/wordchoosing" component={WordChoosing} />
-            <Route path="/guessingpage" component={GuessingPage} />
+            <Route path="/" exact element={<Home/>} />
+            <Route path="/welcome" element={<Welcome/>} />
+            <Route path="/drawpage" element={<DrawPage/>} />
+            <Route path="/wordchoosing" element={<WordChoosing/>} />
+            <Route path="/guessingpage" element={<GuessingPage/>} />
           {/* </GameProvider> */}
-        </Switch>
+        </Routes>
         </GameProvider>
 
       </div>
