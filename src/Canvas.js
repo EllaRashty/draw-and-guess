@@ -11,7 +11,7 @@ export function Canvas() {
 
   return (
     <div>
-      <canvas
+      <canvas className="canvas-draw"
         // onMouseDown={startDrawing}
         onPointerDown={startDrawing}
         onPointerMove={draw}

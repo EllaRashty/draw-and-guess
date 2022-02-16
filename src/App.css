@@ -1,8 +1,12 @@
 .App {
-    text-align: center;
-  }
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-nav{
+nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -10,10 +14,17 @@ nav{
   background: rgb(104, 182, 207);
 }
 
-.nav-links{
+.nav-links {
   width: 50%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   list-style: none;
+}
+
+.canvas-draw {
+  background-color: rgb(234, 244, 247);
+  border-color: rgb(50, 42, 165);
+  border-radius: 2ch;
+  border-style: ridge;
 }

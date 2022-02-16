@@ -10,9 +10,9 @@ export const CanvasProvider = ({ children }) => {
   const prepareCanvas = () => {
     const canvas = canvasRef.current;
     canvas.width = window.visualViewport.width * 2;
-    canvas.height = window.visualViewport.height * 2;
+    canvas.height = window.visualViewport.height *1.5;
     canvas.style.width = `${window.visualViewport.width}px`;
-    canvas.style.height = `${window.visualViewport.height}px`;
+    canvas.style.height = `${canvas.height/2}px`;
 
     const context = canvas.getContext("2d");
     context.scale(2, 2);
