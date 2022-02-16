@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useCanvas } from "./CanvasContext";
+import { AppContext } from "./Helpers/Context";
 
 export function Canvas() {
-  const { canvasRef, prepareCanvas, startDrawing, finishDrawing, draw,save } =
+  const { canvasRef, prepareCanvas, startDrawing, finishDrawing, draw, save } =
     useCanvas();
 
   useEffect(() => {
@@ -11,13 +12,14 @@ export function Canvas() {
 
   return (
     <div>
-      <canvas className="canvas-draw"
+      <canvas
+        className="canvas-draw"
         // onMouseDown={startDrawing}
-        onPointerDown={startDrawing}
-        onPointerMove={draw}
+        onPointerDown={(value) => startDrawing(value)}
+        onPointerMove={(value) => draw(value)}
         // onMouseUp={finishDrawing}
         // onMouseMove={draw}
-        onPointerLeave={finishDrawing}
+        onPointerLeave={(value) => finishDrawing(value)}
         ref={canvasRef}
       />
       <button onClick={save}>save</button>

@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 
 const CanvasContext = React.createContext();
 
-export const CanvasProvider = ({ children }) => {
+export const CanvasProvider = (props) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -10,9 +10,9 @@ export const CanvasProvider = ({ children }) => {
   const prepareCanvas = () => {
     const canvas = canvasRef.current;
     canvas.width = window.visualViewport.width * 2;
-    canvas.height = window.visualViewport.height *1.5;
+    canvas.height = window.visualViewport.height * 1.5;
     canvas.style.width = `${window.visualViewport.width}px`;
-    canvas.style.height = `${canvas.height/2}px`;
+    canvas.style.height = `${canvas.height / 2}px`;
 
     const context = canvas.getContext("2d");
     context.scale(2, 2);
@@ -58,35 +58,38 @@ export const CanvasProvider = ({ children }) => {
       context.canvas.width,
       context.canvas.height
     );
+    console.log(data);
+    props.setCanvas(data);
     // clearCanvas();
     // context.putImageData(data, 100, 100);
   };
 
-  const displayCanvas = () => {
-    if (!data) {
-      const context = canvasRef.current.getContext("2d");
-      console.log("here")
-      // return context.putImageData(data, 100, 100);
-      return 'helo';
-    }
-  };
+  // const displayCanvas = () => {
+  //   if (!data) {
+  //     const context = canvasRef.current.getContext("2d");
+  //     console.log("here");
+  //     context.putImageData(data, 100, 100);
+  //   }
+  // };
 
   return (
-    <CanvasContext.Provider
-      value={{
-        canvasRef,
-        contextRef,
-        prepareCanvas,
-        startDrawing,
-        finishDrawing,
-        clearCanvas,
-        draw,
-        save,
-        displayCanvas,
-      }}
-    >
-      {children}
-    </CanvasContext.Provider>
+    <div>
+      <CanvasContext.Provider
+        value={{
+          canvasRef,
+          contextRef,
+          prepareCanvas,
+          startDrawing,
+          finishDrawing,
+          clearCanvas,
+          draw,
+          save,
+          // displayCanvas,
+        }}
+      >
+        {props.children}
+      </CanvasContext.Provider>
+    </div>
   );
 };
 

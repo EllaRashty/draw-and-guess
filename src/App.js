@@ -10,7 +10,8 @@ import { GameProvider, GameContext } from "./GameContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
 
-function App() {
+
+function App({ canvas }) {
   const [gameState, setGameState] = useState({});
   return (
     <Router>
@@ -24,7 +25,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/drawpage" element={<DrawPage />} />
               <Route path="/wordchoosing" element={<WordChoosing />} />
-              <Route path="/guessingpage" element={<GuessingPage />} />
+              <Route path="/guessingpage" element={<GuessingPage canvas={canvas} />} />
               {/* </GameProvider> */}
             </Routes>
           </AppContext.Provider>
