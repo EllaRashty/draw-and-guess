@@ -14,7 +14,7 @@ function Nav() {
       <h3>Nav</h3>
       <p>List of game: {games.length}</p>
       <ul className="nav-links">
-        <Link style={navStyle} to="/welcome">
+        <Link style={navStyle} to="/">
           <li>Welcome</li>
         </Link>
         <Link style={navStyle} to="/drawpage">
