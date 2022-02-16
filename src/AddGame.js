@@ -3,19 +3,19 @@ import { GameContext } from "./GameContext";
 
 const AddGame = () => {
   const [word, setWord] = useState('');
-  const [players, setPlayers] = useState('');
+  const [points, setPoints] = useState('');
   const [games, setGames] = useContext(GameContext);
 
   const updateWord = e => {
     setWord(e.target.value);
   };
-  const updatePlayers = e => {
-    setPlayers(e.target.value);
+  const updatePoints = e => {
+    setPoints(e.target.value);
   };
 
   const addGame = e => {
     e.preventDefault();
-    setGames(pervGames => [...pervGames, { word: word, players: players }]);
+    setGames(pervGames => [...pervGames, { word: word, points: points }]);
   };
 
   return (
@@ -24,8 +24,8 @@ const AddGame = () => {
       <input
         type='text'
         players='players'
-        value={players}
-        onChange={updatePlayers}
+        value={points}
+        onChange={updatePoints}
       />
       <button>Submit</button>
     </form>

@@ -7,7 +7,7 @@ const GameList = () => {
   return (
     <div>
       {games.map((game) => (
-        <Game word={game.word} players={game.players} key={game.id} />
+        <Game word={game.word} points={game.points} key={game.id} />
       ))}
     </div>
   );

@@ -1,10 +1,10 @@
 import React from "react";
 
-const Game = ({ word, players }) => {
+const Game = ({ word, points }) => {
   return (
     <div>
-      <h3>{word}</h3>
-      <p>{players}</p>
+      <p>{word}</p>
+      <p>{points}</p>
     </div>
   );
 };
