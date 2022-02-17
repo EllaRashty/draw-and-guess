@@ -10,11 +10,11 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import { AppContext } from "./Helpers/Context";
 
 function Welcome() {
   const [games, setGames] = useContext(GameContext);
-  const [player1Turn, setPlayer1Turn] = useContext(GameContext);
-  const [rounds, setRounds] = useContext(GameContext);
+  const { gameId, setGameId } = useContext(AppContext);
 
   let navigate = useNavigate();
 
@@ -26,16 +26,15 @@ function Welcome() {
 
   const updatePlayer1 = async (id, player1) => {
     const userDoc = doc(db, "users", id);
-    const newFields = { player1: player1};
+    const newFields = { player1: player1, player1Turn: true };
     await updateDoc(userDoc, newFields);
-    setPlayer1Turn(true);
+    setGameId(id);
   };
 
-  const updatePlayer2 = async (id, player2) => {
+  const updatePlayer2 = async (id, player2, rounds) => {
     const userDoc = doc(db, "users", id);
-    const newFields = { player2: player2 };
+    const newFields = { player2: player2, rounds: rounds + 1 };
     await updateDoc(userDoc, newFields);
-    setRounds(rounds+1);
   };
 
   useEffect(() => {
@@ -53,9 +52,7 @@ function Welcome() {
       {users.map((user) => {
         return (
           <div>
-            <p>
-              Player 1: {user.player1} , Player 2:{user.player2}
-            </p>
+            <p>Player 1 :  {user.player1} </p>
             <input
               placeholder="Player 1..."
               onChange={(event) => {
@@ -70,6 +67,7 @@ function Welcome() {
             >
               Start Game
             </button>
+            <p>Player 2 :  {user.player2} </p>
             <input
               placeholder="Player 2..."
               onChange={(event) => {
@@ -78,7 +76,7 @@ function Welcome() {
             />
             <button
               onClick={() => {
-                updatePlayer2(user.id, newName2);
+                updatePlayer2(user.id, newName2, user.rounds);
                 navigate("/waitingview");
               }}
             >
@@ -103,8 +101,6 @@ function Welcome() {
       >
         player 2
       </button> */}
-      <GameList />
-      <p>Total Games: {games.length}</p>
     </form>
   );
 }
