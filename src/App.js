@@ -13,18 +13,19 @@ function App({ canvas }) {
   const [gameState, setGameState] = useState({});
   const [player1Turn, setPlayer1Turn] = useState(true);
   const [rounds, setRounds] = useState(0);
+  const [gameId, setGameId] = useState("");
 
   return (
     <Router>
       <div className="App">
         <GameProvider>
-          <AppContext.Provider value={{ gameState, setGameState,player1Turn, setPlayer1Turn,rounds, setRounds }}>
+          <AppContext.Provider value={{ gameState, setGameState,player1Turn, setPlayer1Turn,rounds, setRounds,gameId, setGameId }}>
             <Nav />
             <Routes>
               {/* <GameProvider> */}
               {/* <Route path="/" exact element={<Home/>} /> */}
               <Route path="/" element={<Welcome />} />
-              <Route path="/drawpage" element={<DrawPage />} />
+              <Route path="/drawpage" element={<DrawPage canvas={canvas}  />} />
               <Route path="/wordchoosing" element={<WordChoosing />} />
               <Route
                 path="/guessingpage"

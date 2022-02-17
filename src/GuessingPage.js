@@ -2,6 +2,14 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import { GameContext } from "./GameContext";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
+import { db } from "./Helpers/firebase-config";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
 function GuessingPage({ canvas }) {
   const { gameState, setGameState } = useContext(AppContext);
@@ -16,12 +24,13 @@ function GuessingPage({ canvas }) {
 
   const checkAnswer = (e) => {
     e.preventDefault();
-    if (temp === gameState.word) {
-      setGames((pervGames) => [
-        ...pervGames,
-        { word: gameState.word, points: gameState.points },
-      ]);
-      navigate("/");
+    if (temp === gameState) {
+      // setGames((pervGames) => [
+      //   ...pervGames,
+      //   { word: gameState.word, points: gameState.points },
+      //   { word: gameState.word, points: gameState.points },
+      // ]);
+      navigate("/wordchoosing");
     }
   };
 
@@ -43,8 +52,25 @@ function GuessingPage({ canvas }) {
     context.putImageData(canvas, 0, 0);
   };
 
+  // firebase data
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "users");
+
+  useEffect(() => {
+    // to check
+    const getUsers = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getUsers();
+  }, []);
+
+
   return (
     <form onSubmit={checkAnswer}>
+      {users.map((user) => {
+        return <div>{setGameState(user.word)}</div>;
+      })}
       <h1>bord</h1>
       <canvas className="canvas-draw" id="canvasId" ref={canvasRef} />
       <button onClick={displayDraw}>diaplayy</button>
