@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { GameContext } from "./GameContext";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
@@ -6,10 +6,14 @@ import { AppContext } from "./Helpers/Context";
 function GuessingPage({ canvas }) {
   const { gameState, setGameState } = useContext(AppContext);
   const [games, setGames] = useContext(GameContext);
-
   const [temp, setTemp] = useState("");
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    prepareCanvas();
+  }, []);
+
   let navigate = useNavigate();
-  console.log(canvas);
+
   const checkAnswer = (e) => {
     e.preventDefault();
     if (temp === gameState.word) {
@@ -25,18 +29,25 @@ function GuessingPage({ canvas }) {
     setTemp(e.target.value);
   };
 
+  const prepareCanvas = () => {
+    const p_canvas = canvasRef.current;
+    p_canvas.width = window.visualViewport.width * 2;
+    p_canvas.height = window.visualViewport.height * 1.5;
+    p_canvas.style.width = `${window.visualViewport.width}px`;
+    p_canvas.style.height = `${p_canvas.height / 2}px`;
+  };
+
   const displayDraw = () => {
-    if (!canvas) {
-      const canvasi = document.getElementById("canvas");
-      const ctx = canvasi.getContext("2d");
-      ctx.putImageData(canvas, 100, 100);
-    }
+    var ctx = document.getElementById("canvasId");
+    var context = ctx.getContext("2d");
+    context.putImageData(canvas, 0, 0);
   };
 
   return (
     <form onSubmit={checkAnswer}>
       <h1>bord</h1>
-      <canvas className="canvas-draw" />
+      <canvas className="canvas-draw" id="canvasId" ref={canvasRef} />
+      <button onClick={displayDraw}>diaplayy</button>
       <input type="text" temp="temp" value={temp} onChange={updateTemp} />
       <button>Submit</button>
     </form>
