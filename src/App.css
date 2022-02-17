@@ -5,13 +5,19 @@
   align-items: center;
   flex-direction: column;
 }
+body {
+  background-image: linear-gradient(120deg, #65d4f6 0%, #85a5fd 100%);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+}
 
 nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
   min-height: 10vh;
-  background: rgb(104, 182, 207);
+  background: rgba(69, 69, 70, 0.39);
 }
 
 .nav-links {
@@ -27,4 +33,33 @@ nav {
   border-color: rgb(50, 42, 165);
   border-radius: 2ch;
   border-style: ridge;
+}
+
+
+form input,
+form button {
+  padding: 0.3rem;
+  margin: 5px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 1ch;
+  background: white;
+}
+form button {
+  color: #0b319c;
+  background: #f7fffe;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button {
+  padding: 0.5rem;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 5px;
+  font-size: 14px;
+  border-radius: 1ch;
+  background: white;
 }
