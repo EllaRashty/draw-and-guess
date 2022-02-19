@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@google-cloud/storage": "^5.18.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "bluebird": "^3.7.2",
     "firebase": "^9.6.6",
     "random-words": "^1.1.2",
     "react": "^17.0.2",

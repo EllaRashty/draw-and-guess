@@ -16,14 +16,12 @@ function GuessingPage({ canvas }) {
   const [games, setGames] = useContext(GameContext);
   const [temp, setTemp] = useState("");
   const canvasRef = useRef(null);
-  useEffect(() => {
-    prepareCanvas();
-  }, []);
 
   let navigate = useNavigate();
 
   const checkAnswer = (e) => {
     e.preventDefault();
+    console.log(gameState);
     if (temp === gameState) {
       // setGames((pervGames) => [
       //   ...pervGames,
@@ -38,18 +36,9 @@ function GuessingPage({ canvas }) {
     setTemp(e.target.value);
   };
 
-  const prepareCanvas = () => {
-    const p_canvas = canvasRef.current;
-    p_canvas.width = window.visualViewport.width * 2;
-    p_canvas.height = window.visualViewport.height * 1.5;
-    p_canvas.style.width = `${window.visualViewport.width}px`;
-    p_canvas.style.height = `${p_canvas.height / 2}px`;
-  };
-
+ 
   const displayDraw = () => {
-    var ctx = document.getElementById("canvasId");
-    var context = ctx.getContext("2d");
-    context.putImageData(canvas, 0, 0);
+    window.location.reload(false);
   };
 
   // firebase data
@@ -66,15 +55,36 @@ function GuessingPage({ canvas }) {
   }, []);
 
 
+  const getWord = (word, id) => {
+    if (id === "LocSFaiw4E3GY9qbMgiS") {
+      setGameState(word);
+    }
+  };
+
   return (
     <form onSubmit={checkAnswer}>
       {users.map((user) => {
-        return <div>{setGameState(user.word)}</div>;
+        return <div>{getWord(user.word, user.id)}</div>;
       })}
-      <h1>bord</h1>
-      <canvas className="canvas-draw" id="canvasId" ref={canvasRef} />
-      <button onClick={displayDraw}>diaplayy</button>
-      <input type="text" temp="temp" value={temp} onChange={updateTemp} />
+      <h1>Guess The Word</h1>
+      <div>
+        <img
+          className="image-draw"
+          height={200}
+          width={200}
+          src={
+            "https://firebasestorage.googleapis.com/v0/b/draw-guess-86bcc.appspot.com/o/files%2Fdraw.png?alt=media&token=133a3108-710d-4720-a378-56c8faa4c783"
+          }
+          alt="new"
+        />
+      </div>
+      <button onClick={displayDraw}> displayy </button>
+      <input
+        type="text"
+        temp="temp"
+        value={temp.toLowerCase()}
+        onChange={updateTemp}
+      />
       <button>Submit</button>
     </form>
   );

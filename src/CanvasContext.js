@@ -1,8 +1,58 @@
 import React, { useContext, useRef, useState } from "react";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  Blob,
+} from "firebase/firestore";
+import { ref } from "firebase/storage";
+import { storage } from "./Helpers/firebase-config";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const CanvasContext = React.createContext();
 
 export const CanvasProvider = (props) => {
+  // const { url, setUrl } = useContext(AppContext);
+  const ImageDataToBlob = function (imageData) {
+    let w = imageData.width;
+    let h = imageData.height;
+    let canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    let ctx = canvas.getContext("2d");
+    ctx.putImageData(imageData, 0, 0); // synchronous
+
+    return new Promise((resolve) => {
+      canvas.toBlob(resolve); // implied image/png format
+    });
+  };
+
+  const temp = async (file) => {
+    if (!file) {
+      return;
+    }
+    const canvasBlob = await ImageDataToBlob(file);
+    console.log(canvasBlob);
+    const storageRef = ref(storage, `/files/draw` + ".png");
+    const uploadTask = uploadBytesResumable(storageRef, canvasBlob); //await
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+        // console.log(url);
+      }
+    );
+  };
+
+
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -49,8 +99,8 @@ export const CanvasProvider = (props) => {
     context.fillStyle = "white";
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
-
-  const save = () => {
+  
+  const save = async() => {
     const context = canvasRef.current.getContext("2d");
     data = context.getImageData(
       0,
@@ -60,6 +110,7 @@ export const CanvasProvider = (props) => {
     );
     console.log(data);
     props.setCanvas(data);
+    await temp(data);
     // clearCanvas();
     // context.putImageData(data, 100, 100);
   };

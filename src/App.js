@@ -13,19 +13,20 @@ function App({ canvas }) {
   const [gameState, setGameState] = useState({});
   const [player1Turn, setPlayer1Turn] = useState(true);
   const [rounds, setRounds] = useState(0);
+  // const [gameId, setGameId] = useState("");
   const [gameId, setGameId] = useState("");
 
   return (
     <Router>
       <div className="App">
         <GameProvider>
-          <AppContext.Provider value={{ gameState, setGameState,player1Turn, setPlayer1Turn,rounds, setRounds,gameId, setGameId }}>
+          <AppContext.Provider value={{ gameState, setGameState,player1Turn, setPlayer1Turn,rounds, setRounds }}>
             <Nav />
             <Routes>
               {/* <GameProvider> */}
               {/* <Route path="/" exact element={<Home/>} /> */}
-              <Route path="/" element={<Welcome />} />
-              <Route path="/drawpage" element={<DrawPage canvas={canvas}  />} />
+              <Route path="/" element={<Welcome  setGameId={setGameId}/>} />
+              <Route path="/drawpage" element={<DrawPage canvas={canvas} gameId={gameId} />} />
               <Route path="/wordchoosing" element={<WordChoosing />} />
               <Route
                 path="/guessingpage"
@@ -33,7 +34,7 @@ function App({ canvas }) {
               />
               <Route
                 path="/waitingview"
-                element={<WaitingView canvas={canvas} />}
+                element={<WaitingView canvas={canvas} gameId={gameId}/>}
               />
               <Route path="*" element={<ErrorPage />} />
               {/* </GameProvider> */}

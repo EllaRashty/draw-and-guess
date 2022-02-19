@@ -9,53 +9,45 @@ import {
   getDocs,
   updateDoc,
   doc,
+  Blob,
 } from "firebase/firestore";
 
-export function Canvas({ canvas }) {
+
+export function Canvas({ canvas, gameId }) {
   const { canvasRef, prepareCanvas, startDrawing, finishDrawing, draw, save } =
     useCanvas();
 
   const { player1Turn, setPlayer1Turn } = useContext(AppContext);
-  const { gameId, setGameId } = useContext(AppContext);
+  // const { gameId, setGameId } = useContext(AppContext);
   const { gameState, setGameState } = useContext(AppContext);
+    let navigate = useNavigate();
 
   useEffect(() => {
     prepareCanvas();
-  }, []);
-
-  let navigate = useNavigate();
-
-  //firebase functions
-  const [users, setUsers] = useState([]);
-  const usersCollectionRef = collection(db, "users");
-
-  const updatePlayer1Turn = async (turn) => {
-    const userDoc = doc(db, "users", gameId);
-    const newFields = { player1Turn: turn };
-    await updateDoc(userDoc, newFields);
-  };
-
-  const updateDraw = async (draw) => {
-    const userDoc = doc(db, "users", gameId);
-    const newFields = { draw: draw };
-    await updateDoc(userDoc, newFields);
-  };
-
-  const updateWord= async (obj_word) => {
-    const userDoc = doc(db, "users", gameId);
-    const newFields = { word: obj_word.word, points:obj_word.points };
-    await updateDoc(userDoc, newFields);
-  };
-
-  useEffect(() => {
-    // to check
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+
     getUsers();
   }, []);
 
+  //firebase data
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "users");
+  
+  const updatePlayer1Turn = async (turn, word) => {
+    try {
+      console.log(db);
+      const userDoc = doc(db, "users", 'LocSFaiw4E3GY9qbMgiS');
+      console.log(word);
+      const newFields = { player1Turn: !turn, word: `${word.word}` };
+      await updateDoc(userDoc, newFields);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <div>
       <canvas
@@ -68,14 +60,11 @@ export function Canvas({ canvas }) {
         onPointerLeave={(value) => finishDrawing(value)}
         ref={canvasRef}
       />
-      {/* <button onClick={save}>save</button> */}
       <button
-        onClick={() => {
-          save();
-          updateWord(gameState);
+        onClick={async () => {
+          await save();
+          await updatePlayer1Turn(player1Turn, gameState);
           setPlayer1Turn(!player1Turn);
-          updatePlayer1Turn(player1Turn);
-          // updateDraw(canvas);
           navigate("/waitingview");
         }}
       >

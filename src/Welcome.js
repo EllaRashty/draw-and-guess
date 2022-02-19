@@ -12,9 +12,10 @@ import {
 } from "firebase/firestore";
 import { AppContext } from "./Helpers/Context";
 
-function Welcome() {
+function Welcome(props) {
   const [games, setGames] = useContext(GameContext);
-  const { gameId, setGameId } = useContext(AppContext);
+  // const { gameId, setGameId } = useContext(AppContext);
+  const { player1Turn, setPlayer1Turn } = useContext(AppContext);
 
   let navigate = useNavigate();
 
@@ -27,8 +28,10 @@ function Welcome() {
   const updatePlayer1 = async (id, player1) => {
     const userDoc = doc(db, "users", id);
     const newFields = { player1: player1, player1Turn: true };
+    setPlayer1Turn(true);
+    props.setGameId(id);
+    console.log(props.gameId)
     await updateDoc(userDoc, newFields);
-    setGameId(id);
   };
 
   const updatePlayer2 = async (id, player2, rounds) => {
@@ -47,12 +50,12 @@ function Welcome() {
   }, []);
 
   return (
-    <form>
+    <div>
       <h1>Welcome</h1>
       {users.map((user) => {
         return (
           <div>
-            <p>Player 1 :  {user.player1} </p>
+            <p>Player 1 : {user.player1} </p>
             <input
               placeholder="Player 1..."
               onChange={(event) => {
@@ -67,7 +70,7 @@ function Welcome() {
             >
               Start Game
             </button>
-            <p>Player 2 :  {user.player2} </p>
+            <p>Player 2 : {user.player2} </p>
             <input
               placeholder="Player 2..."
               onChange={(event) => {
@@ -101,7 +104,7 @@ function Welcome() {
       >
         player 2
       </button> */}
-    </form>
+    </div>
   );
 }
 
