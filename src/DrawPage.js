@@ -5,6 +5,10 @@ import { AppContext } from "./Helpers/Context";
 
 function DrawPage({ canvas ,gameId}) {
   const { gameState, setGameState } = useContext(AppContext);
+  window.onbeforeunload = function () {
+    window.location.reload(false);
+    window.scrollTo(0, 0);
+  }
   return (
     <div>
       <p>Level:{gameState.level} </p>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GameContext } from "./GameContext";
-import GameList from "./GameList";
+// import { GameContext } from "./GameContext";
 import { db } from "./Helpers/firebase-config";
 import {
   addDoc,
@@ -13,7 +12,7 @@ import {
 import { AppContext } from "./Helpers/Context";
 
 function Welcome(props) {
-  const [games, setGames] = useContext(GameContext);
+  // const [games, setGames] = useContext(GameContext);
   // const { gameId, setGameId } = useContext(AppContext);
   const { player1Turn, setPlayer1Turn } = useContext(AppContext);
 

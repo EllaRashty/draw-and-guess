@@ -19,7 +19,6 @@ export function Canvas({ canvas, gameId }) {
 
   const { player1Turn, setPlayer1Turn } = useContext(AppContext);
   // const { gameId, setGameId } = useContext(AppContext);
-  const { gameState, setGameState } = useContext(AppContext);
     let navigate = useNavigate();
 
   useEffect(() => {
@@ -36,12 +35,11 @@ export function Canvas({ canvas, gameId }) {
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
   
-  const updatePlayer1Turn = async (turn, word) => {
+  const updatePlayer1Turn = async (turn) => {
     try {
       console.log(db);
       const userDoc = doc(db, "users", 'LocSFaiw4E3GY9qbMgiS');
-      console.log(word);
-      const newFields = { player1Turn: !turn, word: `${word.word}` };
+      const newFields = { player1Turn: !turn };
       await updateDoc(userDoc, newFields);
     } catch (error) {
       console.log(error);
@@ -63,8 +61,7 @@ export function Canvas({ canvas, gameId }) {
       <button
         onClick={async () => {
           await save();
-          await updatePlayer1Turn(player1Turn, gameState);
-          setPlayer1Turn(!player1Turn);
+          await updatePlayer1Turn(player1Turn);
           navigate("/waitingview");
         }}
       >

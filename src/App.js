@@ -4,7 +4,7 @@ import Welcome from "./Welcome";
 import DrawPage from "./DrawPage";
 import WordChoosing from "./WordChoosing";
 import GuessingPage from "./GuessingPage";
-import { GameProvider, GameContext } from "./GameContext";
+// import { GameProvider, GameContext } from "./GameContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
 import WaitingView from "./WaitingView";
@@ -19,7 +19,7 @@ function App({ canvas }) {
   return (
     <Router>
       <div className="App">
-        <GameProvider>
+        {/* <GameProvider> */}
           <AppContext.Provider value={{ gameState, setGameState,player1Turn, setPlayer1Turn,rounds, setRounds }}>
             <Nav />
             <Routes>
@@ -40,7 +40,7 @@ function App({ canvas }) {
               {/* </GameProvider> */}
             </Routes>
           </AppContext.Provider>
-        </GameProvider>
+        {/* </GameProvider> */}
       </div>
     </Router>
   );

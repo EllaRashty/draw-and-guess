@@ -37,21 +37,35 @@ function WaitingView({ canvas, gameId }) {
   }, []);
 
   function refreshPage() {
-    window.location.reload(false);
+    window.location.reload(true);
   }
+
+  const getPlayerTurn = (turn, id) => {
+    if (id === "LocSFaiw4E3GY9qbMgiS") {
+      setPlayer1Turn(turn);
+    }
+  };
 
   return (
     <div>
+            {users.map((user) => {
+        return (
+          <div>
+            {console.log(user.player1Turn)}
+            {getPlayerTurn(user.player1Turn,user.id)}
+          </div>
+        );
+      })}
       <h2>Pleas Wait...</h2>
       <button
         disabled={player1Turn}
-        onClick={async () => {
+        onClick={() => {
           navigate("/guessingpage");
         }}
       >
         player 2 : {displayMSG(player1Turn)}
       </button>
-      <p></p>
+      <p>console.log(player1Turn)</p>
       <button
         disabled={!player1Turn}
         onClick={() => {
@@ -60,14 +74,7 @@ function WaitingView({ canvas, gameId }) {
       >
         player 1 : {displayMSG(!player1Turn)}
       </button>
-      {users.map((user) => {
-        return (
-          <div>
-            {console.log(user.player1Turn)}
-            {setPlayer1Turn(user.player1Turn)}
-          </div>
-        );
-      })}
+
       <button onClick={refreshPage}>Refresh</button>
     </div>
   );

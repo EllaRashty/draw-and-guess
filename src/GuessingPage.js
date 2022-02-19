@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import { GameContext } from "./GameContext";
+// import { GameContext } from "./GameContext";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
 import { db } from "./Helpers/firebase-config";
@@ -13,7 +13,7 @@ import {
 
 function GuessingPage({ canvas }) {
   const { gameState, setGameState } = useContext(AppContext);
-  const [games, setGames] = useContext(GameContext);
+  // const [games, setGames] = useContext(GameContext);
   const [temp, setTemp] = useState("");
   const canvasRef = useRef(null);
 
@@ -22,7 +22,7 @@ function GuessingPage({ canvas }) {
   const checkAnswer = (e) => {
     e.preventDefault();
     console.log(gameState);
-    if (temp === gameState) {
+    if (temp.replace(/ /g, '') === gameState) {
       // setGames((pervGames) => [
       //   ...pervGames,
       //   { word: gameState.word, points: gameState.points },
