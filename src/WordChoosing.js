@@ -2,13 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
 import { db } from "./Helpers/firebase-config";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 function WordChoosing() {
   const { gameState, setGameState } = useContext(AppContext);
 
@@ -48,8 +42,11 @@ function WordChoosing() {
 
   const updateWord = async (word) => {
     try {
-      const userDoc = doc(db, "users", "LocSFaiw4E3GY9qbMgiS");
-      const newFields = { word: `${word.word}` };
+      const userDoc = doc(db, "users", "currentGameInfo");
+      const newFields = {
+        word: `${word.word}`,
+        points: word.points,
+      };
       setGameState(word);
       await updateDoc(userDoc, newFields);
     } catch (error) {
@@ -62,7 +59,7 @@ function WordChoosing() {
       <h1>Choose a word:</h1>
       <div className="word-section">
         {words.map((word) => (
-          <div>
+          <div key={word.points}>
             <h3>{word.level}</h3>
             <button
               onClick={async () => {

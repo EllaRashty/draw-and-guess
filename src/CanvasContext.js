@@ -1,12 +1,4 @@
 import React, { useContext, useRef, useState } from "react";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-  Blob,
-} from "firebase/firestore";
 import { ref } from "firebase/storage";
 import { storage } from "./Helpers/firebase-config";
 import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -14,7 +6,6 @@ import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 const CanvasContext = React.createContext();
 
 export const CanvasProvider = (props) => {
-  // const { url, setUrl } = useContext(AppContext);
   const ImageDataToBlob = function (imageData) {
     let w = imageData.width;
     let h = imageData.height;
@@ -29,14 +20,14 @@ export const CanvasProvider = (props) => {
     });
   };
 
-  const temp = async (file) => {
+  const uploadDraw = async (file) => {
     if (!file) {
       return;
     }
     const canvasBlob = await ImageDataToBlob(file);
     console.log(canvasBlob);
     const storageRef = ref(storage, `/files/draw` + ".png");
-    const uploadTask = uploadBytesResumable(storageRef, canvasBlob); //await
+    const uploadTask = uploadBytesResumable(storageRef, canvasBlob);
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -47,11 +38,9 @@ export const CanvasProvider = (props) => {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
-        // console.log(url);
       }
     );
   };
-
 
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
@@ -67,7 +56,7 @@ export const CanvasProvider = (props) => {
     const context = canvas.getContext("2d");
     context.scale(2, 2);
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = props.myColor;
     context.lineWidth = 3;
     contextRef.current = context;
   };
@@ -99,8 +88,8 @@ export const CanvasProvider = (props) => {
     context.fillStyle = "white";
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
-  
-  const save = async() => {
+
+  const save = async () => {
     const context = canvasRef.current.getContext("2d");
     data = context.getImageData(
       0,
@@ -108,20 +97,9 @@ export const CanvasProvider = (props) => {
       context.canvas.width,
       context.canvas.height
     );
-    console.log(data);
     props.setCanvas(data);
-    await temp(data);
-    // clearCanvas();
-    // context.putImageData(data, 100, 100);
+    await uploadDraw(data);
   };
-
-  // const displayCanvas = () => {
-  //   if (!data) {
-  //     const context = canvasRef.current.getContext("2d");
-  //     console.log("here");
-  //     context.putImageData(data, 100, 100);
-  //   }
-  // };
 
   return (
     <div>
@@ -135,7 +113,6 @@ export const CanvasProvider = (props) => {
           clearCanvas,
           draw,
           save,
-          // displayCanvas,
         }}
       >
         {props.children}

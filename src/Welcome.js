@@ -1,24 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { GameContext } from "./GameContext";
 import { db } from "./Helpers/firebase-config";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { AppContext } from "./Helpers/Context";
 
 function Welcome(props) {
-  // const [games, setGames] = useContext(GameContext);
-  // const { gameId, setGameId } = useContext(AppContext);
   const { player1Turn, setPlayer1Turn } = useContext(AppContext);
 
   let navigate = useNavigate();
 
-  // firebase varibels
+  // firebase variables
   const [newName1, setNewName1] = useState("");
   const [newName2, setNewName2] = useState("");
   const [users, setUsers] = useState([]);
@@ -28,14 +19,12 @@ function Welcome(props) {
     const userDoc = doc(db, "users", id);
     const newFields = { player1: player1, player1Turn: true };
     setPlayer1Turn(true);
-    props.setGameId(id);
-    console.log(props.gameId)
     await updateDoc(userDoc, newFields);
   };
 
-  const updatePlayer2 = async (id, player2, rounds) => {
+  const updatePlayer2 = async (id, player2) => {
     const userDoc = doc(db, "users", id);
-    const newFields = { player2: player2, rounds: rounds + 1 };
+    const newFields = { player2: player2 };
     await updateDoc(userDoc, newFields);
   };
 
@@ -50,20 +39,21 @@ function Welcome(props) {
 
   return (
     <div>
-      <h1>Welcome</h1>
+      <h1>Draw & Guess</h1>
       {users.map((user) => {
         return (
-          <div>
+          <div key={user.id}>
             <p>Player 1 : {user.player1} </p>
             <input
-              placeholder="Player 1..."
+              placeholder="Enter name player-1..."
               onChange={(event) => {
                 setNewName1(event.target.value);
               }}
             />
             <button
+              className="player1-btn "
               onClick={() => {
-                updatePlayer1(user.id, newName1);
+                updatePlayer1("currentGameInfo", newName1);
                 navigate("/wordchoosing");
               }}
             >
@@ -71,38 +61,24 @@ function Welcome(props) {
             </button>
             <p>Player 2 : {user.player2} </p>
             <input
-              placeholder="Player 2..."
+              placeholder="Enter name player-2..."
               onChange={(event) => {
                 setNewName2(event.target.value);
               }}
             />
             <button
+              className="player2-btn "
               onClick={() => {
-                updatePlayer2(user.id, newName2, user.rounds);
+                updatePlayer2("currentGameInfo", newName2);
                 navigate("/waitingview");
               }}
             >
               Start Game
             </button>
+            <h3>The best score: {user.score}</h3>
           </div>
         );
       })}
-      {/* <button
-        onClick={() => {
-          navigate("/wordchoosing");
-          setPlayer1(true);
-        }}
-      >
-        player 1
-      </button>
-      <button
-        onClick={() => {
-          navigate("/waitingview");
-          setPlayer2(true);
-        }}
-      >
-        player 2
-      </button> */}
     </div>
   );
 }

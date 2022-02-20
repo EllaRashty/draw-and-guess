@@ -2,36 +2,24 @@ import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "./Helpers/Context";
 import { useNavigate } from "react-router-dom";
 import { db } from "./Helpers/firebase-config";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
-function WaitingView({ canvas, gameId }) {
+function WaitingView({ canvas }) {
   const { player1Turn, setPlayer1Turn } = useContext(AppContext);
-  // const { gameId, setGameId } = useContext(AppContext);
-  const { gameState, setGameState } = useContext(AppContext);
-  // const { url, setUrl } = useContext(AppContext);
 
-  
-  const displayMSG = (condition) => { // const buutonText = player1Turn ? "wait" : "continue";
+  const displayMSG = (condition) => {
     return condition ? "wait" : "continue";
   };
 
   let navigate = useNavigate();
 
-  // firebase data
+  // firebase variables
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
   useEffect(() => {
-    // to check
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      console.log(data);
     };
     getUsers();
   }, []);
@@ -41,23 +29,21 @@ function WaitingView({ canvas, gameId }) {
   }
 
   const getPlayerTurn = (turn, id) => {
-    if (id === "LocSFaiw4E3GY9qbMgiS") {
+    if (id === "currentGameInfo") {
       setPlayer1Turn(turn);
     }
   };
 
   return (
     <div>
-            {users.map((user) => {
+      {users.map((user) => {
         return (
-          <div>
-            {console.log(user.player1Turn)}
-            {getPlayerTurn(user.player1Turn,user.id)}
-          </div>
+          <div key={user.id}>{getPlayerTurn(user.player1Turn, user.id)}</div>
         );
       })}
-      <h2>Pleas Wait...</h2>
+      <h2>Wait For Your Turn:</h2>
       <button
+        className="player1-btn"
         disabled={player1Turn}
         onClick={() => {
           navigate("/guessingpage");
@@ -65,8 +51,9 @@ function WaitingView({ canvas, gameId }) {
       >
         player 2 : {displayMSG(player1Turn)}
       </button>
-      <p>console.log(player1Turn)</p>
+      <p></p>
       <button
+        className="player2-btn"
         disabled={!player1Turn}
         onClick={() => {
           navigate("/guessingpage");
@@ -74,8 +61,10 @@ function WaitingView({ canvas, gameId }) {
       >
         player 1 : {displayMSG(!player1Turn)}
       </button>
-
-      <button onClick={refreshPage}>Refresh</button>
+      <p></p>
+      <button onClick={refreshPage} className="refresh-btn">
+        Refresh
+      </button>
     </div>
   );
 }

@@ -1,19 +1,11 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-// import { GameContext } from "./GameContext";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./Helpers/Context";
 import { db } from "./Helpers/firebase-config";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 function GuessingPage({ canvas }) {
   const { gameState, setGameState } = useContext(AppContext);
-  // const [games, setGames] = useContext(GameContext);
   const [temp, setTemp] = useState("");
   const canvasRef = useRef(null);
 
@@ -22,12 +14,7 @@ function GuessingPage({ canvas }) {
   const checkAnswer = (e) => {
     e.preventDefault();
     console.log(gameState);
-    if (temp.replace(/ /g, '') === gameState) {
-      // setGames((pervGames) => [
-      //   ...pervGames,
-      //   { word: gameState.word, points: gameState.points },
-      //   { word: gameState.word, points: gameState.points },
-      // ]);
+    if (temp.replace(/ /g, "") === gameState) {
       navigate("/wordchoosing");
     }
   };
@@ -36,7 +23,6 @@ function GuessingPage({ canvas }) {
     setTemp(e.target.value);
   };
 
- 
   const displayDraw = () => {
     window.location.reload(false);
   };
@@ -46,7 +32,6 @@ function GuessingPage({ canvas }) {
   const usersCollectionRef = collection(db, "users");
 
   useEffect(() => {
-    // to check
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -54,9 +39,8 @@ function GuessingPage({ canvas }) {
     getUsers();
   }, []);
 
-
   const getWord = (word, id) => {
-    if (id === "LocSFaiw4E3GY9qbMgiS") {
+    if (id === "currentGameInfo") {
       setGameState(word);
     }
   };
@@ -64,7 +48,7 @@ function GuessingPage({ canvas }) {
   return (
     <form onSubmit={checkAnswer}>
       {users.map((user) => {
-        return <div>{getWord(user.word, user.id)}</div>;
+        return <div key={user.id}>{getWord(user.word, user.id)}</div>;
       })}
       <h1>Guess The Word</h1>
       <div>
@@ -78,14 +62,14 @@ function GuessingPage({ canvas }) {
           alt="new"
         />
       </div>
-      <button onClick={displayDraw}> displayy </button>
+      <button onClick={displayDraw}> display </button>
       <input
         type="text"
         temp="temp"
         value={temp.toLowerCase()}
         onChange={updateTemp}
       />
-      <button>Submit</button>
+      <button className="complete-btn">Submit</button>
     </form>
   );
 }
